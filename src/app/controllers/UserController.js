@@ -1,5 +1,7 @@
 const { User } = require('../models');
 
+const generateToken = require('../../utils/generateToken');
+
 module.exports = {
   async store(req, res) {
     try {
@@ -7,9 +9,11 @@ module.exports = {
 
       if (userExists) { return res.status(400).json({ error: 'User already exists' }); }
 
-      const { email } = await User.create(req.body);
+      const { id, email } = await User.create(req.body);
 
-      return res.status(201).json({ user: { email } });
+      const token = await generateToken(id);
+
+      return res.status(201).json({ user: { email, token } });
     } catch (err) {
       return res.status(500).json({ error: err.message });
     }
