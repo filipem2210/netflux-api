@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs');
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     email: {
@@ -26,6 +28,14 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     avatar: DataTypes.STRING,
   });
+
+  User.beforeCreate(async (user) => {
+    const salt = await bcrypt.genSalt(10);
+    const hashPwd = await bcrypt.hash(user.password, salt);
+
+    user.set('password', hashPwd);
+  });
+
 
   return User;
 };
