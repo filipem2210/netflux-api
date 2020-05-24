@@ -8,11 +8,13 @@ const compression = require('compression');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 
+const sentryConfig = require('./config/sentry');
+
 const routes = require('./routes');
 
 const app = express();
 
-Sentry.init({ dsn: process.env.SENTRY_DSN });
+Sentry.init(sentryConfig);
 
 app.use(Sentry.Handlers.requestHandler());
 app.use(helmet());
