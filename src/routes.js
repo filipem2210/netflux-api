@@ -6,6 +6,8 @@ const rateLimitConfig = require('./config/rateLimit');
 
 const apiLimiter = rateLimit(rateLimitConfig);
 
+const authMiddleware = require('./app/middlewares/auth');
+
 const UserController = require('./app/controllers/UserController');
 const SessionController = require('./app/controllers/SessionController');
 
@@ -21,6 +23,17 @@ routes.post(
     }),
   }),
   UserController.store,
+);
+
+routes.get(
+  '/me',
+  celebrate({
+    [Segments.HEADERS]: Joi.object({
+      authorization: Joi.string().required(),
+    }).unknown(),
+  }),
+  authMiddleware,
+  UserController.show,
 );
 
 routes.post(

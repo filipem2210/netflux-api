@@ -17,4 +17,24 @@ module.exports = {
       return res.status(500).json({ error: err.message });
     }
   },
+
+  async show(req, res) {
+    try {
+      const { id } = req.authorized_user;
+
+      const {
+        email,
+        name,
+        avatar,
+      } = await User.findByPk(id);
+
+      return res.status(200).json({
+        email,
+        name,
+        avatar,
+      });
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
+    }
+  },
 };
