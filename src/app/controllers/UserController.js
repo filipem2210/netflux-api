@@ -16,7 +16,7 @@ module.exports = {
         }
 
         const users = await User.findAll();
-        redisClient.set('allusers', JSON.stringify(users), 'EX', 120);
+        redisClient.setex('allusers', 10, JSON.stringify(users));
 
         return res.status(200).json(users);
       });
