@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
+const Sentry = require('@sentry/node');
 const morgan = require('morgan');
 const compression = require('compression');
 const bodyParser = require('body-parser');
@@ -10,6 +12,9 @@ const routes = require('./routes');
 
 const app = express();
 
+Sentry.init({ dsn: process.env.SENTRY_DSN });
+
+app.use(Sentry.Handlers.requestHandler());
 app.use(helmet());
 app.use(cors({
   origin: '*',
@@ -21,6 +26,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use('/api', routes);
 
+app.use(Sentry.Handlers.errorHandler());
 app.use(errors());
 
 module.exports = app;
