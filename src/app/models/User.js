@@ -36,6 +36,5 @@ module.exports = (sequelize, DataTypes) => {
     user.set('password', hashPwd);
   });
 
-
   return User;
 };
