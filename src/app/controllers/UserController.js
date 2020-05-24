@@ -1,7 +1,30 @@
+const redis = require('redis');
 const { User } = require('../models');
+
+const redisClient = redis.createClient();
+
 const generateToken = require('../../utils/generateToken');
 
 module.exports = {
+  async index(req, res) {
+    try {
+      return redisClient.get('allusers', async (err, result) => {
+        if (result) {
+          const resultJSON = JSON.parse(result);
+
+          return res.status(200).json(resultJSON);
+        }
+
+        const users = await User.findAll();
+        redisClient.set('allusers', JSON.stringify(users), 'EX', 120);
+
+        return res.status(200).json(users);
+      });
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
+    }
+  },
+
   async store(req, res) {
     try {
       const userExists = await User.findOne({ where: { email: req.body.email } });

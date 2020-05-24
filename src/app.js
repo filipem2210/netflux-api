@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -15,8 +14,8 @@ const routes = require('./routes');
 const app = express();
 
 Sentry.init(sentryConfig);
-
 app.use(Sentry.Handlers.requestHandler());
+
 app.use(helmet());
 app.use(cors({
   origin: '*',
