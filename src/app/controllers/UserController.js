@@ -1,9 +1,13 @@
+require('dotenv').config();
 const redis = require('redis');
 const { User } = require('../models');
 
 const REDIS_PORT = process.env.REDIS_PORT || 6379;
 
-const redisClient = redis.createClient(REDIS_PORT);
+const redisClient = redis.createClient({
+  host: 'redis',
+  port: REDIS_PORT,
+});
 
 const generateToken = require('../../utils/generateToken');
 

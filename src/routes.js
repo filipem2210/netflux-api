@@ -36,11 +36,6 @@ routes.get(
   UserController.show,
 );
 
-routes.get(
-  '/users',
-  UserController.index,
-);
-
 routes.post(
   '/signin',
   apiLimiter,
