@@ -1,39 +1,42 @@
-version: '3.1'
+version: "3.8"
 services:
+
   db:
     image: mysql:latest
     container_name: db
     restart: always
-    ports: 
-      - '${DB_PORT}:3306'
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${DB_DATABASE}
       - MYSQL_USER=${DB_USERNAME}
       - MYSQL_PASSWORD=${DB_PASSWORD}
-    volumes: 
-      - mysql_data:/var/lib/mysql
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+    volumes:
+      - mysql-data:/var/lib/mysql
 
   redis:
     image: redis:6-alpine
     container_name: redis
     restart: always
     ports:
-      - '6379:6379'
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    depends_on:
+      - db
     command: redis-server
 
   api:
     image: node:lts-alpine
     container_name: api
     restart: always
-    ports: 
-      - '3333:3333'
-    depends_on: 
+    ports:
+      - "${PORT}:${PORT}"
+    depends_on:
       - db
-    volumes: 
+    volumes:
       - .:/usr/src/app
     working_dir: /usr/src/app
-    command: sh -c './wait-for db:3306 -- yarn start'
+    command: sh -c './wait-for db:${DB_PORT} -- yarn start'
 
 volumes:
-  mysql_data: 
+  mysql-data:
