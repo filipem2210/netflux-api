@@ -2,11 +2,9 @@ require('dotenv').config();
 const redis = require('redis');
 const { Movie } = require('../models');
 
-const REDIS_PORT = process.env.REDIS_PORT || 6379;
-
 const redisClient = redis.createClient({
-  host: 'redis',
-  port: REDIS_PORT,
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
 });
 
 module.exports = {
