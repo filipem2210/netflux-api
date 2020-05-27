@@ -6,8 +6,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
+        notNull: {
+          msg: 'Please enter your email',
+        },
         notEmpty: {
-          msg: 'This field is required',
+          msg: 'Please enter your email',
         },
         isEmail: true,
       },
@@ -16,8 +19,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
+        notNull: {
+          msg: 'Please enter your password',
+        },
         notEmpty: {
-          msg: 'This field is required',
+          msg: 'Please enter your password',
         },
         len: {
           args: [6, 10],

@@ -1,36 +1,8 @@
-require('dotenv').config();
-const redis = require('redis');
 const { User } = require('../models');
-
-const REDIS_PORT = process.env.REDIS_PORT || 6379;
-
-const redisClient = redis.createClient({
-  host: 'redis',
-  port: REDIS_PORT,
-});
 
 const generateToken = require('../../utils/generateToken');
 
 module.exports = {
-  async index(req, res) {
-    try {
-      return redisClient.get('allusers', async (err, result) => {
-        if (result) {
-          const resultJSON = JSON.parse(result);
-
-          return res.status(200).json(resultJSON);
-        }
-
-        const users = await User.findAll();
-        redisClient.setex('allusers', 10, JSON.stringify(users));
-
-        return res.status(200).json(users);
-      });
-    } catch (err) {
-      return res.status(500).json({ error: err.message });
-    }
-  },
-
   async store(req, res) {
     try {
       const userExists = await User.findOne({ where: { email: req.body.email } });
