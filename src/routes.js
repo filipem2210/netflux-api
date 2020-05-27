@@ -31,17 +31,6 @@ routes.post(
   UserController.store,
 );
 
-routes.get(
-  '/me',
-  celebrate({
-    [Segments.HEADERS]: Joi.object({
-      authorization: Joi.string().required(),
-    }).unknown(),
-  }),
-  authMiddleware,
-  UserController.show,
-);
-
 routes.post(
   '/signin',
   bruteforce.prevent,
@@ -54,6 +43,18 @@ routes.post(
   SessionController.store,
 );
 
+routes.use(authMiddleware);
+
+routes.get(
+  '/me',
+  celebrate({
+    [Segments.HEADERS]: Joi.object({
+      authorization: Joi.string().required(),
+    }).unknown(),
+  }),
+  UserController.show,
+);
+
 routes.get(
   '/movies',
   celebrate({
@@ -64,7 +65,6 @@ routes.get(
       page: Joi.number(),
     }),
   }),
-  authMiddleware,
   MovieController.index,
 );
 
@@ -84,7 +84,6 @@ routes.post(
       genres: Joi.string().allow(''),
     }),
   }),
-  authMiddleware,
   MovieController.store,
 );
 
