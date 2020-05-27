@@ -1,10 +1,15 @@
+require('dotenv').config();
 const { Router } = require('express');
-const rateLimit = require('express-rate-limit');
+const ExpressBrute = require('express-brute');
+const RedisStore = require('express-brute-redis');
 const { celebrate, Segments, Joi } = require('celebrate');
 
-const rateLimitConfig = require('./config/rateLimit');
+const store = new RedisStore({
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
+});
 
-const apiLimiter = rateLimit(rateLimitConfig);
+const bruteforce = new ExpressBrute(store);
 
 const authMiddleware = require('./app/middlewares/auth');
 
@@ -16,7 +21,7 @@ const routes = Router();
 
 routes.post(
   '/signup',
-  apiLimiter,
+  bruteforce.prevent,
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       email: Joi.string().email().required(),
@@ -39,7 +44,7 @@ routes.get(
 
 routes.post(
   '/signin',
-  apiLimiter,
+  bruteforce.prevent,
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       email: Joi.string().email().required(),
