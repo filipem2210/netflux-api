@@ -4,7 +4,6 @@ const cors = require('cors');
 const Sentry = require('@sentry/node');
 const morgan = require('morgan');
 const compression = require('compression');
-const bodyParser = require('body-parser');
 const path = require('path');
 const { errors } = require('celebrate');
 
@@ -24,7 +23,6 @@ app.use(cors({
 }));
 app.use(morgan('dev'));
 app.use(compression());
-app.use(bodyParser.json());
 app.use(express.json());
 app.use('/api/static/images/movies', express.static(path.resolve(__dirname, '..', 'uploads', 'movies')));
 app.use('/api', routes);
