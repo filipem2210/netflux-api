@@ -5,9 +5,9 @@ const multer = require('multer');
 const { celebrate, Segments, Joi } = require('celebrate');
 
 const rateLimitConfig = require('./config/rateLimit');
-const apiLimiter = rateLimit(rateLimitConfig);
-
 const multerConfig = require('./config/multer');
+
+const apiLimiter = rateLimit(rateLimitConfig);
 const upload = multer(multerConfig);
 
 const authMiddleware = require('./app/middlewares/auth');

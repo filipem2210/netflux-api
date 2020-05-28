@@ -3,10 +3,10 @@ const path = require('path');
 const fs = require('fs');
 
 module.exports = async (file, resize, folder) => {
-  const { filename: avatar } = file;
+  const { filename: image } = file;
 
-  const [imgName] = avatar.split('.');
-  const fileName = `${Date.now()}-${imgName}.jpg`;
+  const [imageName] = image.split('.');
+  const fileName = `${Date.now()}-${imageName}.jpg`;
 
   await sharp(file.path)
     .resize(resize)

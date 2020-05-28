@@ -43,7 +43,6 @@ module.exports = {
         genres,
       } = req.body;
 
-
       const movieExists = await Movie.findOne({ where: { title } });
 
       if (movieExists) {
