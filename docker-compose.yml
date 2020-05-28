@@ -35,7 +35,6 @@ services:
       - db
     volumes:
       - .:/usr/src/app
-      - /usr/src/app/node_modules
     working_dir: /usr/src/app
     command: sh -c './wait-for db:${DB_PORT} -- yarn start'
 
