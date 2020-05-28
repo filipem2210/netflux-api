@@ -51,7 +51,7 @@ module.exports = {
 
       let fileName;
       if (req.file) {
-        fileName = await uploadImg(req.file, 341, 'movies');
+        fileName = await uploadImg(req.file, 341, 192, 'movies');
       } else {
         return res.status(400).json({ message: 'The movie image is required' });
       }
