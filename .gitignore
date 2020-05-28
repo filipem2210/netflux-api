@@ -4,3 +4,7 @@ node_modules
 
 private.pem
 public.pem
+
+uploads/*
+uploads/movies/*
+!uploads/movies/.gitkeep

@@ -9,10 +9,9 @@
     "url": "https://github.com/filipem2210"
   },
   "scripts": {
-    "local": "nodemon src/server.js",
     "dev": "docker-compose up -d",
-    "prestart": "npx sequelize db:migrate",
-    "start": "pm2 start src/server.js --name netflux-api --watch --no-daemon"
+    "prestart": "yarn install",
+    "start": "npx sequelize db:migrate && nodemon src/server.js"
   },
   "dependencies": {
     "@sentry/node": "^5.15.5",
@@ -29,11 +28,13 @@
     "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
+    "multer": "^1.4.2",
     "mysql2": "^2.1.0",
     "pm2": "^4.4.0",
     "rate-limit-redis": "^2.0.0",
     "redis": "^3.0.2",
-    "sequelize": "^5.21.10"
+    "sequelize": "^5.21.10",
+    "sharp": "^0.25.3"
   },
   "devDependencies": {
     "eslint": "^6.8.0",

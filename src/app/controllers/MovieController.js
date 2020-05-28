@@ -1,5 +1,6 @@
 require('dotenv').config();
 const redis = require('redis');
+const uploadImg = require('../../utils/uploadImg');
 const { Movie } = require('../models');
 
 const redisClient = redis.createClient({
@@ -33,15 +34,48 @@ module.exports = {
 
   async store(req, res) {
     try {
-      const movieExists = await Movie.findOne({ where: { title: req.body.title } });
+      const {
+        file,
+        title,
+        description,
+        creators,
+        cast,
+        genres,
+      } = req.body;
+
+
+      const movieExists = await Movie.findOne({ where: { title } });
 
       if (movieExists) {
         return res.status(400).json({ error: 'Movie already exists' });
       }
 
-      const movie = await Movie.create(req.body);
+      let fileName;
+      if (req.file) {
+        fileName = await uploadImg(req.file, 341, 'movies');
+      } else {
+        return res.status(400).json({ message: 'The movie image is required' });
+      }
 
-      return res.status(200).json(movie);
+      const movie = await Movie.create({
+        file,
+        title,
+        description,
+        image: fileName,
+        creators,
+        cast,
+        genres,
+      });
+
+      return res.status(201).json({
+        file: movie.file,
+        title: movie.title,
+        description: movie.description,
+        image: movie.image,
+        creators: movie.creators,
+        cast: movie.cast,
+        genres: movie.genres,
+      });
     } catch (err) {
       return res.status(500).json({ error: err.message });
     }

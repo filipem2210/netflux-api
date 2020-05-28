@@ -1,8 +1,13 @@
 require('dotenv').config();
 const { Router } = require('express');
+const multer = require('multer');
 const ExpressBrute = require('express-brute');
 const RedisStore = require('express-brute-redis');
 const { celebrate, Segments, Joi } = require('celebrate');
+
+const multerConfig = require('./config/multer');
+
+const upload = multer(multerConfig);
 
 const store = new RedisStore({
   host: process.env.REDIS_HOST,
@@ -70,6 +75,7 @@ routes.get(
 
 routes.post(
   '/movies',
+  upload.single('image'),
   celebrate({
     [Segments.HEADERS]: Joi.object().keys({
       authorization: Joi.string().required(),
@@ -78,7 +84,7 @@ routes.post(
       file: Joi.string().required(),
       title: Joi.string().required(),
       description: Joi.string().required(),
-      image: Joi.string().required(),
+      image: Joi.string().allow(''),
       creators: Joi.string().allow(''),
       cast: Joi.string().allow(''),
       genres: Joi.string().allow(''),

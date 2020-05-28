@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const compression = require('compression');
 const bodyParser = require('body-parser');
 const rateLimit = require('express-rate-limit');
+const path = require('path');
 const { errors } = require('celebrate');
 
 const sentryConfig = require('./config/sentry');
@@ -29,6 +30,7 @@ app.use(morgan('dev'));
 app.use(compression());
 app.use(bodyParser.json());
 app.use(express.json());
+app.use('/api/static/images/movies', express.static(path.resolve(__dirname, '..', 'uploads', 'movies')));
 app.use(apiLimiter);
 app.use('/api', routes);
 
