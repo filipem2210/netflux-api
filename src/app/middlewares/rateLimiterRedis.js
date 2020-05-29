@@ -11,8 +11,9 @@ const redisClient = redis.createClient({
 const rateLimiter = new RateLimiterRedis({
   storeClient: redisClient,
   keyPrefix: 'middleware',
-  points: 4,
-  duration: 1,
+  points: 5,
+  duration: 60 * 15,
+  blockDuration: 60 * 15,
 });
 
 const rateLimiterMiddleware = (req, res, next) => {
@@ -21,7 +22,7 @@ const rateLimiterMiddleware = (req, res, next) => {
       next();
     })
     .catch(() => {
-      res.status(429).json({ error: 'Too Many Requests' });
+      res.status(429).json({ error: 'Too many accounts created or login attempts from this IP, please try again after 15 minutes' });
     });
 };
 

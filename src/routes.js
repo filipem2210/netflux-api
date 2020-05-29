@@ -2,7 +2,6 @@ const { Router } = require('express');
 const { celebrate, Segments, Joi } = require('celebrate');
 
 const upload = require('./config/multer');
-const apiLimiter = require('./config/rateLimit');
 
 const rateLimiterMiddleware = require('./app/middlewares/rateLimiterRedis');
 const authMiddleware = require('./app/middlewares/auth');
@@ -16,7 +15,6 @@ const routes = Router();
 routes.post(
   '/signup',
   rateLimiterMiddleware,
-  apiLimiter,
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       email: Joi.string().email().required(),
@@ -29,7 +27,6 @@ routes.post(
 routes.post(
   '/signin',
   rateLimiterMiddleware,
-  apiLimiter,
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       email: Joi.string().email().required(),
