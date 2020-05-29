@@ -11,8 +11,10 @@ const limiter = new RateLimit({
     }),
   }),
   windowMs: 1000 * 60 * 15,
-  max: 10,
-  message: 'Too many accounts created or login attempts from this IP, please try again after 15 minutes',
+  max: 5,
+  handler(req, res) {
+    res.status(429).json({ error: 'Too many accounts created or login attempts from this IP, please try again after 15 minutes' });
+  },
 });
 
 module.exports = limiter;
