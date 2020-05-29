@@ -1,14 +1,8 @@
-require('dotenv').config();
 const { Router } = require('express');
-const rateLimit = require('express-rate-limit');
-const multer = require('multer');
 const { celebrate, Segments, Joi } = require('celebrate');
 
-const rateLimitConfig = require('./config/rateLimit');
-const multerConfig = require('./config/multer');
-
-const apiLimiter = rateLimit(rateLimitConfig);
-const upload = multer(multerConfig);
+const apiLimiter = require('./config/rateLimit');
+const upload = require('./config/multer');
 
 const authMiddleware = require('./app/middlewares/auth');
 
