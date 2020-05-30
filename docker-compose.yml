@@ -1,9 +1,9 @@
 version: "3.8"
 services:
 
-  db:
+  netflux_db:
     image: mysql:latest
-    container_name: db
+    container_name: netflux_db
     restart: always
     ports:
       - "${DB_PORT}:${DB_PORT}"
@@ -13,30 +13,32 @@ services:
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
       - MYSQL_DATABASE=${DB_DATABASE}
     volumes:
-      - mysql-data:/var/lib/mysql
+      - netflux-mysql-data:/var/lib/mysql
 
-  redis:
+  netflux_redis:
     image: redis:6-alpine
-    container_name: redis
+    container_name: netflux_redis
     restart: always
     ports:
       - "${REDIS_PORT}:${REDIS_PORT}"
     depends_on:
-      - db
+      - netflux_db
     command: redis-server
 
-  api:
+  netflux_api:
     image: node:lts-alpine
-    container_name: api
+    container_name: netflux_api
     restart: always
     ports:
       - "${PORT}:${PORT}"
     depends_on:
-      - db
+      - netflux_redis
+      - netflux_db
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/node_modules
     working_dir: /usr/src/app
-    command: sh -c './wait-for db:${DB_PORT} -- yarn start'
+    command: sh -c './wait-for netflux_db:${DB_PORT} -- yarn start'
 
 volumes:
-  mysql-data:
+  netflux-mysql-data:
