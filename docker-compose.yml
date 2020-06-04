@@ -1,12 +1,11 @@
-version: "3.8"
+version: '3.8'
 services:
-
   netflux_db:
     image: mysql:latest
     container_name: netflux_db
     restart: always
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - '${DB_PORT}:${DB_PORT}'
     environment:
       - MYSQL_USER=${DB_USERNAME}
       - MYSQL_PASSWORD=${DB_PASSWORD}
@@ -14,13 +13,14 @@ services:
       - MYSQL_DATABASE=${DB_DATABASE}
     volumes:
       - netflux-mysql-data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
 
   netflux_redis:
     image: redis:6-alpine
     container_name: netflux_redis
     restart: always
     ports:
-      - "${REDIS_PORT}:${REDIS_PORT}"
+      - '${REDIS_PORT}:${REDIS_PORT}'
     command: redis-server
 
   netflux_api:
@@ -28,7 +28,7 @@ services:
     container_name: netflux_api
     restart: always
     ports:
-      - "${PORT}:${PORT}"
+      - '${PORT}:${PORT}'
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
