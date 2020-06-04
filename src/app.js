@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -18,7 +19,7 @@ app.use(Sentry.Handlers.requestHandler());
 
 app.use(helmet());
 app.use(cors({
-  origin: '*',
+  origin: process.env.CORS_ORIGIN,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 app.use(morgan('dev'));
