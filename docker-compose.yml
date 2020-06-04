@@ -21,8 +21,6 @@ services:
     restart: always
     ports:
       - "${REDIS_PORT}:${REDIS_PORT}"
-    depends_on:
-      - netflux_db
     command: redis-server
 
   netflux_api:
@@ -31,9 +29,6 @@ services:
     restart: always
     ports:
       - "${PORT}:${PORT}"
-    depends_on:
-      - netflux_redis
-      - netflux_db
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
