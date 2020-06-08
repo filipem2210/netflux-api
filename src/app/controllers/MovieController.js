@@ -1,4 +1,3 @@
-require('dotenv').config();
 const redis = require('redis');
 const uploadImg = require('../../utils/uploadImg');
 const { Movie } = require('../models');
