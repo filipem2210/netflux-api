@@ -10,7 +10,6 @@
   },
   "scripts": {
     "dev": "docker-compose up -d",
-    "prestart": "yarn install",
     "start": "npx sequelize db:migrate && nodemon src/server.js"
   },
   "dependencies": {
