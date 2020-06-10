@@ -10,7 +10,8 @@
   },
   "scripts": {
     "dev": "docker-compose up -d",
-    "start": "npx sequelize db:migrate && nodemon src/server.js"
+    "prestart": "npx sequelize db:migrate",
+    "start": "pm2-runtime src/server.js --name netflux --watch -i 0"
   },
   "dependencies": {
     "@sentry/node": "^5.15.5",
