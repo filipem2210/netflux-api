@@ -2,10 +2,9 @@ const redis = require('redis');
 const uploadImg = require('../../utils/uploadImg');
 const { Movie } = require('../models');
 
-const redisClient = redis.createClient({
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT,
-});
+const redisConfig = require('../../config/redis');
+
+const redisClient = redis.createClient(redisConfig);
 
 module.exports = {
   async index(req, res) {
