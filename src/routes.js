@@ -36,8 +36,6 @@ routes.post(
   SessionController.store,
 );
 
-routes.use(authMiddleware);
-
 routes.get(
   '/me',
   celebrate({
@@ -45,6 +43,7 @@ routes.get(
       authorization: Joi.string().required(),
     }).unknown(),
   }),
+  authMiddleware,
   UserController.show,
 );
 
@@ -58,6 +57,7 @@ routes.get(
       page: Joi.number().integer().positive(),
     }),
   }),
+  authMiddleware,
   MovieController.index,
 );
 
@@ -78,6 +78,7 @@ routes.post(
       genres: Joi.string().allow(''),
     }),
   }),
+  authMiddleware,
   MovieController.store,
 );
 
