@@ -1,7 +1,7 @@
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 
-module.exports = function auth(req, res, next) {
+module.exports = (req, res, next) => {
   let token = req.headers.authorization;
 
   if (!token) return res.status(401).json({ error: 'Token not provided' });
