@@ -13,6 +13,8 @@ const sentryConfig = require('./config/sentry');
 const corsConfig = require('./config/cors');
 const sessionConfig = require('./config/session');
 
+const routeNotFound = require('./app/middlewares/routeNotFound');
+
 const routes = require('./routes');
 
 const app = express();
@@ -28,6 +30,7 @@ app.use(compression());
 app.use(express.json());
 app.use('/api/static/images/movies', express.static(path.resolve(__dirname, '..', 'uploads', 'movies')));
 app.use('/api', routes);
+app.use(routeNotFound);
 
 app.use(Sentry.Handlers.errorHandler());
 app.use(errors());
