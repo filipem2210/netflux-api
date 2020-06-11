@@ -24,7 +24,6 @@ module.exports = {
         });
       }
       const movies = await Movie.findAll();
-      redisClient.setex('allmovies', 10, JSON.stringify(movies));
 
       return res.status(200).json(movies);
     } catch (err) {
