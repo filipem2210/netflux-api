@@ -28,7 +28,7 @@ services:
     container_name: netflux_api
     restart: always
     ports:
-      - '${PORT}:3333'
+      - '${APP_PORT}:3333'
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
