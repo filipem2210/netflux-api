@@ -1,30 +1,32 @@
-const redis = require('redis');
-const uploadImg = require('../../utils/uploadImg');
 const { Movie } = require('../models');
+const uploadImg = require('../../utils/uploadImg');
 
-const redisConfig = require('../../config/redis');
-
-const redisClient = redis.createClient(redisConfig);
+const redisClient = require('../../utils/redisClient');
 
 module.exports = {
   async index(req, res) {
     try {
-      return redisClient.get('allmovies', async (err, result) => {
-        if (err) {
-          return res.status(500).json({ error: err.message });
-        }
+      if (redisClient.connected) {
+        return redisClient.get('allmovies', async (err, result) => {
+          if (err) {
+            return res.status(500).json({ error: err.message });
+          }
 
-        if (result) {
-          const resultJSON = JSON.parse(result);
+          if (result) {
+            const resultJSON = JSON.parse(result);
 
-          return res.status(200).json(resultJSON);
-        }
+            return res.status(200).json(resultJSON);
+          }
+          const movies = await Movie.findAll();
+          redisClient.setex('allmovies', 10, JSON.stringify(movies));
 
-        const movies = await Movie.findAll();
-        redisClient.setex('allmovies', 10, JSON.stringify(movies));
+          return res.status(200).json(movies);
+        });
+      }
+      const movies = await Movie.findAll();
+      redisClient.setex('allmovies', 10, JSON.stringify(movies));
 
-        return res.status(200).json(movies);
-      });
+      return res.status(200).json(movies);
     } catch (err) {
       return res.status(500).json({ error: err.message });
     }
