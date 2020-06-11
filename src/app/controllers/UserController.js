@@ -1,4 +1,5 @@
 const { User } = require('../models');
+const Queue = require('../lib/Queue');
 
 const generateToken = require('../../utils/generateToken');
 
@@ -14,6 +15,8 @@ module.exports = {
       const { id, email } = await User.create(req.body);
 
       const token = await generateToken(id);
+
+      await Queue.add({ email: req.body.email });
 
       return res.status(201).json({
         user: {
