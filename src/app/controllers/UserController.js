@@ -16,7 +16,7 @@ module.exports = {
 
       const token = await generateToken(id);
 
-      await Queue.add({ email: req.body.email });
+      await Queue.add('RegistrationMail', { email: req.body.email });
 
       return res.status(201).json({
         user: {

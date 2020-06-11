@@ -1,8 +1,30 @@
 const Queue = require('bull');
+const Sentry = require('@sentry/node');
 const redisConfig = require('../../config/redis');
 
-const RegistrationMail = require('../jobs/RegistrationMail');
+const jobs = require('../jobs');
 
-const mailQueue = new Queue(RegistrationMail.key, redisConfig);
+const queues = Object.values(jobs).map((job) => ({
+  bull: new Queue(job.key, `redis://${redisConfig.host}:${redisConfig.port}`),
+  name: job.key,
+  handle: job.handle,
+  options: job.options,
+}));
 
-module.exports = mailQueue;
+module.exports = {
+  queues,
+  add(name, data) {
+    const queue = queues.find((queueName) => queueName.name === name);
+
+    return queue.bull.add(data, queue.options);
+  },
+  process() {
+    return queues.forEach((queue) => {
+      queue.bull.process(queue.handle);
+
+      queue.bull.on('failed', (job, err) => {
+        Sentry.captureException(err);
+      });
+    });
+  },
+};

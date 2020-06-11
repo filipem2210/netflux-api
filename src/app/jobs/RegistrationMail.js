@@ -2,6 +2,9 @@ const Mail = require('../lib/Mail');
 
 module.exports = {
   key: 'RegistrationMail',
+  options: {
+    priority: 1,
+  },
   async handle({ data }) {
     const { email } = data;
 
