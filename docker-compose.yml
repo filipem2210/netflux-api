@@ -33,7 +33,7 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     working_dir: /usr/src/app
-    command: sh -c './wait-for netflux_db:3306 -- yarn && yarn cache clean && yarn start'
+    command: sh -c './wait-for netflux_db:3306 -- yarn && yarn cache clean && yarn dev'
 
 volumes:
   netflux-mysql-data:
