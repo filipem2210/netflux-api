@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   netflux_db:
-    image: mysql:8
+    image: mysql:8.0.21
     container_name: netflux_db
     restart: always
     ports:
@@ -16,7 +16,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
 
   netflux_redis:
-    image: redis:6-alpine
+    image: redis:6.0.5-alpine3.12
     container_name: netflux_redis
     restart: always
     ports:
@@ -24,7 +24,7 @@ services:
     command: redis-server
 
   netflux_api:
-    image: node:12-alpine
+    image: node:12.18.2-alpine3.12
     container_name: netflux_api
     restart: always
     ports:
@@ -33,7 +33,7 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     working_dir: /usr/src/app
-    command: sh -c './wait-for netflux_db:3306 -- yarn global add pm2 && yarn && yarn cache clean && yarn start'
+    command: sh -c './wait-for netflux_db:3306 --  yarn && yarn global add pm2 && yarn cache clean && yarn start'
 
 volumes:
   netflux-mysql-data:
