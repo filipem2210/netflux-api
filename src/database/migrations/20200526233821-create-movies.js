@@ -6,10 +6,6 @@ module.exports = {
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    file: {
-      allowNull: false,
-      type: Sequelize.STRING,
-    },
     title: {
       allowNull: false,
       type: Sequelize.STRING,
@@ -19,19 +15,42 @@ module.exports = {
       allowNull: false,
       type: Sequelize.TEXT,
     },
-    image: {
-      allowNull: false,
+    backdrop_path: {
+      allowNull: true,
       type: Sequelize.STRING,
+    },
+    poster_path: {
+      allowNull: true,
+      type: Sequelize.STRING,
+    },
+    genres: {
+      allowNull: true,
+      type: Sequelize.INTEGER,
+    },
+    year: {
+      allowNull: true,
+      type: Sequelize.INTEGER,
+    },
+    netflix: {
+      allowNull: true,
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
+    },
+    trending: {
+      allowNull: true,
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
+    },
+    top_rated: {
+      allowNull: true,
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
     },
     creators: {
       allowNull: true,
       type: Sequelize.STRING,
     },
     cast: {
-      allowNull: true,
-      type: Sequelize.STRING,
-    },
-    genres: {
       allowNull: true,
       type: Sequelize.STRING,
     },

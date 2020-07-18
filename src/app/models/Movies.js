@@ -1,17 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
   const Movie = sequelize.define('Movie', {
-    file: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: 'Please enter movie file',
-        },
-        notEmpty: {
-          msg: 'Please enter movie file',
-        },
-      },
-    },
     title: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -36,21 +24,15 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
     },
-    image: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: 'Please enter movie image',
-        },
-        notEmpty: {
-          msg: 'Please enter movie image',
-        },
-      },
-    },
+    poster_path: DataTypes.STRING,
+    backdrop_path: DataTypes.STRING,
+    genres: DataTypes.INTEGER,
+    year: DataTypes.INTEGER,
+    netflix: DataTypes.BOOLEAN,
+    trending: DataTypes.BOOLEAN,
+    top_rated: DataTypes.BOOLEAN,
     creators: DataTypes.STRING,
     cast: DataTypes.STRING,
-    genres: DataTypes.STRING,
   });
 
   return Movie;
