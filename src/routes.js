@@ -1,8 +1,6 @@
 const { Router } = require('express');
 const { celebrate, Segments, Joi } = require('celebrate');
 
-const upload = require('./config/multer');
-
 const rateLimiterMiddleware = require('./app/middlewares/rateLimiterRedis');
 const authMiddleware = require('./app/middlewares/auth');
 
@@ -22,6 +20,17 @@ routes.post(
     }),
   }),
   UserController.store,
+);
+
+routes.post(
+  '/checkUser',
+  rateLimiterMiddleware,
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      email: Joi.string().email().required(),
+    }),
+  }),
+  UserController.checkUser,
 );
 
 routes.post(
@@ -54,32 +63,54 @@ routes.get(
       authorization: Joi.string().required(),
     }).unknown(),
     [Segments.QUERY]: Joi.object().keys({
-      page: Joi.number().integer().positive(),
+      page: Joi.number(),
+      genres: Joi.number(),
     }),
   }),
   authMiddleware,
   MovieController.index,
 );
 
-routes.post(
-  '/movies',
-  upload.single('image'),
+routes.get(
+  '/movies/netflix',
   celebrate({
     [Segments.HEADERS]: Joi.object().keys({
       authorization: Joi.string().required(),
     }).unknown(),
-    [Segments.BODY]: Joi.object().keys({
-      file: Joi.string().required(),
-      title: Joi.string().required(),
-      description: Joi.string().required(),
-      image: Joi.string().allow(''),
-      creators: Joi.string().allow(''),
-      cast: Joi.string().allow(''),
-      genres: Joi.string().allow(''),
+    [Segments.QUERY]: Joi.object().keys({
+      page: Joi.number(),
     }),
   }),
   authMiddleware,
-  MovieController.store,
+  MovieController.netflix,
+);
+
+routes.get(
+  '/movies/top_rated',
+  celebrate({
+    [Segments.HEADERS]: Joi.object().keys({
+      authorization: Joi.string().required(),
+    }).unknown(),
+    [Segments.QUERY]: Joi.object().keys({
+      page: Joi.number(),
+    }),
+  }),
+  authMiddleware,
+  MovieController.top_rated,
+);
+
+routes.get(
+  '/movies/trending',
+  celebrate({
+    [Segments.HEADERS]: Joi.object().keys({
+      authorization: Joi.string().required(),
+    }).unknown(),
+    [Segments.QUERY]: Joi.object().keys({
+      page: Joi.number(),
+    }),
+  }),
+  authMiddleware,
+  MovieController.trending,
 );
 
 module.exports = routes;
