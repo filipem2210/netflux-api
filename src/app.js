@@ -28,7 +28,7 @@ app.use(session(sessionConfig));
 app.use(morgan('dev'));
 app.use(compression());
 app.use(express.json());
-app.use('/api/v1/static/images/movies', express.static(path.resolve(__dirname, '..', 'images', 'reduced')));
+app.use('/api/v1/static/images/movies', express.static(path.resolve(__dirname, 'images', 'reduced')));
 app.use('/api/v1', routes);
 app.use(routeNotFound);
 
