@@ -52,4 +52,19 @@ module.exports = {
       return res.status(500).json({ error: err.message });
     }
   },
+
+  async checkUser(req, res) {
+    try {
+      const { email } = req.body;
+
+      const userExists = await User.findOne({ where: { email } });
+
+      if (userExists) {
+        return res.status(400).json({ error: 'User Already Exists' });
+      }
+      return res.status(200).json({ exists: false });
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
+    }
+  },
 };
