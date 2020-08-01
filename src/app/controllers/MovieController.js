@@ -1,13 +1,13 @@
 const { Movie } = require('../models');
-const uploadImg = require('../../utils/uploadImg');
 
 const redisClient = require('../../utils/redisClient');
 
 module.exports = {
   async index(req, res) {
+    const { genres } = req.query;
     try {
       if (redisClient.connected) {
-        return redisClient.get('allmovies', async (err, result) => {
+        return redisClient.get('all_movies', async (err, result) => {
           if (err) {
             return res.status(500).json({ error: err.message });
           }
@@ -15,10 +15,19 @@ module.exports = {
           if (result) {
             const resultJSON = JSON.parse(result);
 
+            if (genres) {
+              const filteredMovies = resultJSON.filter((movie) => movie.genres === genres);
+              return res.status(200).json(filteredMovies);
+            }
+
             return res.status(200).json(resultJSON);
           }
+          if (genres) {
+            const moviesGenre = await Movie.findAll({ where: { genres } });
+            return res.status(200).json(moviesGenre);
+          }
           const movies = await Movie.findAll();
-          redisClient.setex('allmovies', 10, JSON.stringify(movies));
+          redisClient.setex('all_movies', 3600, JSON.stringify(movies));
 
           return res.status(200).json(movies);
         });
@@ -31,49 +40,82 @@ module.exports = {
     }
   },
 
-  async store(req, res) {
+  async netflix(req, res) {
     try {
-      const {
-        file,
-        title,
-        description,
-        creators,
-        cast,
-        genres,
-      } = req.body;
+      if (redisClient.connected) {
+        return redisClient.get('netflix_movies', async (err, result) => {
+          if (err) {
+            return res.status(500).json({ error: err.message });
+          }
 
-      const movieExists = await Movie.findOne({ where: { title } });
+          if (result) {
+            const resultJSON = JSON.parse(result);
 
-      if (movieExists) {
-        return res.status(400).json({ error: 'Movie already exists' });
+            return res.status(200).json(resultJSON);
+          }
+          const netflixMovies = await Movie.findAll({ where: { netflix: 1 } });
+          redisClient.setex('netflix_movies', 3600, JSON.stringify(netflixMovies));
+
+          return res.status(200).json(netflixMovies);
+        });
       }
+      const movies = await Movie.findAll({ where: { netflix: 1 } });
 
-      let fileName;
-      if (req.file) {
-        fileName = await uploadImg(req.file, 341, 192, 'movies');
-      } else {
-        return res.status(400).json({ message: 'The movie image is required' });
+      return res.status(200).json(movies);
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
+    }
+  },
+
+  async top_rated(req, res) {
+    try {
+      if (redisClient.connected) {
+        return redisClient.get('top_rated_movies', async (err, result) => {
+          if (err) {
+            return res.status(500).json({ error: err.message });
+          }
+
+          if (result) {
+            const resultJSON = JSON.parse(result);
+
+            return res.status(200).json(resultJSON);
+          }
+          const topRatedMovies = await Movie.findAll({ where: { top_rated: 1 } });
+          redisClient.setex('top_rated_movies', 3600, JSON.stringify(topRatedMovies));
+
+          return res.status(200).json(topRatedMovies);
+        });
       }
+      const movies = await Movie.findAll({ where: { top_rated: 1 } });
 
-      const movie = await Movie.create({
-        file,
-        title,
-        description,
-        image: fileName,
-        creators,
-        cast,
-        genres,
-      });
+      return res.status(200).json(movies);
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
+    }
+  },
 
-      return res.status(201).json({
-        file: movie.file,
-        title: movie.title,
-        description: movie.description,
-        image: movie.image,
-        creators: movie.creators,
-        cast: movie.cast,
-        genres: movie.genres,
-      });
+  async trending(req, res) {
+    try {
+      if (redisClient.connected) {
+        return redisClient.get('trending_movies', async (err, result) => {
+          if (err) {
+            return res.status(500).json({ error: err.message });
+          }
+
+          if (result) {
+            const resultJSON = JSON.parse(result);
+
+            return res.status(200).json(resultJSON);
+          }
+          const trendingMovies = await Movie.findAll({ where: { trending: 1 } });
+          redisClient.setex('trending_movies', 3600, JSON.stringify(trendingMovies));
+
+          return res.status(200).json(trendingMovies);
+        });
+      }
+      const movies = await Movie.findAll({ where: { trending: 1 } });
+
+      return res.status(200).json(movies);
     } catch (err) {
       return res.status(500).json({ error: err.message });
     }
