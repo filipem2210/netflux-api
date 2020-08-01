@@ -15,7 +15,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
 
   netflux_redis:
-    image: redis:6.0.5-alpine3.12
+    image: redis:6.0.6-alpine3.12
     container_name: netflux_redis
     restart: always
     ports:
@@ -23,7 +23,7 @@ services:
     command: redis-server
 
   netflux_api:
-    image: node:12.18.2-alpine3.12
+    image: node:12.18.3-alpine3.12
     container_name: netflux_api
     restart: always
     ports:
