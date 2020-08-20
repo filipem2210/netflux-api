@@ -8,7 +8,6 @@
 
 * [Node.js](https://nodejs.org/en/)
 * [Express](https://www.npmjs.com/package/express)
-
 * [Bcrypt](https://www.npmjs.com/package/bcrypt)
 * [Bull](https://www.npmjs.com/package/bull)
 * [Celebrate](https://www.npmjs.com/package/celebrate)
@@ -46,11 +45,8 @@ $ cd netflux-api
 $ openssl genrsa -des3 -out private.pem 2048
 $ openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 
-# Install dependencies
-$ yarn dev
-
 # Run the app
-$ yarn start
+$ yarn dev
 ```
 
 ## :memo: License
