@@ -63,8 +63,8 @@ routes.get(
       authorization: Joi.string().required(),
     }).unknown(),
     [Segments.QUERY]: Joi.object().keys({
-      page: Joi.number(),
-      genres: Joi.number(),
+      page: Joi.number().integer().positive(),
+      genres: Joi.number().integer().positive(),
     }),
   }),
   authMiddleware,
@@ -78,7 +78,7 @@ routes.get(
       authorization: Joi.string().required(),
     }).unknown(),
     [Segments.QUERY]: Joi.object().keys({
-      page: Joi.number(),
+      page: Joi.number().integer().positive(),
     }),
   }),
   authMiddleware,
@@ -92,7 +92,7 @@ routes.get(
       authorization: Joi.string().required(),
     }).unknown(),
     [Segments.QUERY]: Joi.object().keys({
-      page: Joi.number(),
+      page: Joi.number().integer().positive(),
     }),
   }),
   authMiddleware,
@@ -106,7 +106,7 @@ routes.get(
       authorization: Joi.string().required(),
     }).unknown(),
     [Segments.QUERY]: Joi.object().keys({
-      page: Joi.number(),
+      page: Joi.number().integer().positive(),
     }),
   }),
   authMiddleware,
