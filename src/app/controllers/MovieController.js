@@ -16,7 +16,8 @@ module.exports = {
             const resultJSON = JSON.parse(result);
 
             if (genres) {
-              const filteredMovies = resultJSON.filter((movie) => movie.genres === genres);
+              const filteredMovies = resultJSON
+                .filter((movie) => Number(movie.genres) === Number(genres));
               return res.status(200).json(filteredMovies);
             }
 
@@ -31,6 +32,10 @@ module.exports = {
 
           return res.status(200).json(movies);
         });
+      }
+      if (genres) {
+        const moviesGenre = await Movie.findAll({ where: { genres } });
+        return res.status(200).json(moviesGenre);
       }
       const movies = await Movie.findAll();
 
