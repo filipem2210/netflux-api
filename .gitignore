@@ -8,3 +8,5 @@ public.pem
 uploads/*
 uploads/movies/*
 !uploads/movies/.gitkeep
+
+movies.json
