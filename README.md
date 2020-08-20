@@ -1,6 +1,6 @@
 <h1 align="center">Netflux API</h1>
 
-<p align="center">Netflux clone with backend, frontend and mobile using Node.js, ReactJS and React Native</p>
+<p align="center">Netflix clone with backend, frontend and mobile using Node.js, ReactJS and React Native</p>
 
 [![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=Netflux&uri=https%3A%2F%2Fgithub.com%2Ffilipem2210%2Fnetflux-api%2Fblob%2Fmaster%2Finsomnia-netflux-button.json)
 
